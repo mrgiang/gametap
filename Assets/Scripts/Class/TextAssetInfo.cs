@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System;
 
-public class TextAsset  {
+[Serializable]
+public class TextAssetInfo  {
     public TextAsset body;
     public TextAsset handleft;
     public TextAsset handright;

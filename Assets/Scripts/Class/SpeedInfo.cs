@@ -1,6 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
-
+﻿using System;
+[Serializable]
 public class SpeedInfo  {
     public float attackspeeditem;
     public float attackspeedskill;

@@ -1,6 +1,6 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
-
+﻿using System.Collections.Generic;
+using System;
+[Serializable]
 public class AnimAsset  {
     public List<Setoffset> AttackQuyen;
     public List<Setoffset> AttackDao1;

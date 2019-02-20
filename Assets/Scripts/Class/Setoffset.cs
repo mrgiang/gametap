@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
-
+using System;
+[Serializable]
 public class Setoffset  {
     public Sprite sprite;
     public Vector3 vector3;
