@@ -1,0 +1,1 @@
+.\tools\LuaToCsv ".\Assets\Resources\Lua\Core\Config" ".\csv"
