@@ -1,10 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System;
 
+[Serializable]
+public class QuaternionMyDictionary : SerializableDictionary<int, AnimAsset> { }
 public class TextAssetManager : MonoBehaviour
 {
+    public static TextAssetManager instance;
     public TextAssetInfo TextAssetInfo;
-    public AnimAsset AnimAsset;
+    public QuaternionMyDictionary dictBody = new QuaternionMyDictionary();
+    public QuaternionMyDictionary dictHandleft = new QuaternionMyDictionary();
+    public QuaternionMyDictionary dictHandright = new QuaternionMyDictionary();
+    public QuaternionMyDictionary dictHead = new QuaternionMyDictionary();
+    [Header("Array")]
     public int[] arrayAnim = new int[44] {144,128,112,96,96,128,96,96,88,120,
                                           144,96,112,112,48,96,80,96,72,64,
                                           56,96,160,128,96,96,104,128,112,88,
@@ -15,18 +23,26 @@ public class TextAssetManager : MonoBehaviour
                                           2080,2176,2336,2464,2560,2656,2760,2888,3000,3088,
                                           3176,3264,3352,3472,3592,3680,3768,3856,3944,4064,4184,
                                           4304, 4424,4496};
-    public int[] arrayAnim2 = new int[44] {18,16,14,12,12,16,12,12,11,15,
+    public int[] arrayAllFrame = new int[44] {18,16,14,12,12,16,12,12,11,15,
                                           18,12,14,14,6,12,10,12,9,8,
                                           7,12,20,16,12,12,13,16,14,11,
                                           11,11,11,15,15,11,11,11,11,15,
                                           15,15,15,9};
-    void Start()
+    //         Attack          Dead          Hit           Chuong           Run           Stand           Walk
+    // quyen   0               7             18            24               29            35              39
+    void Awake()
     {
-        SetAnimAsset(TextAssetInfo.body.text);
-        GetAnimSprite(3759);
+        instance = this;
+        dictBody.Add(3759,SetAnimAsset(TextAssetInfo.body.text, 3759));
+        dictHandleft.Add(6021, SetAnimAsset(TextAssetInfo.handleft.text, 6021));
+        dictHandright.Add(7153, SetAnimAsset(TextAssetInfo.handright.text, 7153));
+        dictHead.Add(4257, SetAnimAsset(TextAssetInfo.head.text, 4257));
+
     }
-    private void SetAnimAsset(string text)
+    #region set norman
+    public AnimAsset SetAnimAsset(string text ,int key)
     {
+        AnimAsset AnimAsset = new AnimAsset();
         string[] array = text.Split('\n');
 
         for (int i = 0; i < arrayAnim.Length; i++)
@@ -41,6 +57,17 @@ public class TextAssetManager : MonoBehaviour
                 AddAnimAsset(AnimAsset,i).Add(setoffset);
             }
         }
+        for (int i = 0; i < arrayAnim.Length; i++)
+        {
+            for (int j = 0; j < arrayAnim[i]; j++)
+            {
+                var sprite = Resources.Load<Sprite>("Sprite/" + (key + i) + "-" + (j + 1));
+                //Debug.Log(i + "|" + j + "   " + (key + i) + "   " + "Sprite/" + (key + i) + "-" + (j + 1));
+                AddSpriteAnim(AnimAsset, i, sprite, j);
+            }
+        }
+
+        return AnimAsset;
     }
     private List<Setoffset> AddAnimAsset(AnimAsset animAsset, int i)
     {
@@ -93,15 +120,55 @@ public class TextAssetManager : MonoBehaviour
         }
         return null;
     }
-
-    private void GetAnimSprite(int key)
+    private void AddSpriteAnim(AnimAsset animAsset, int i,Sprite sprite ,int j)
     {
-        for (int i = 0; i < arrayAnim.Length; i++)
+        switch (i)
         {
-            for (int j = 0; j < arrayAnim[i]; j++)
-            {
-                Debug.Log("i:"+i+"       "+key + i);
-            }          
+            case 0:  animAsset.AttackQuyen[j].sprite = sprite; break;
+            case 1:  animAsset.AttackDao1[j].sprite = sprite; break;
+            case 2:  animAsset.AttackDao2[j].sprite = sprite; break;
+            case 3:  animAsset.AttackBong1[j].sprite = sprite; break;
+            case 4:  animAsset.AttackBong2[j].sprite = sprite; break;
+            case 5:  animAsset.AttackChuy1[j].sprite = sprite; break;
+            case 6:  animAsset.AttackChuy2[j].sprite = sprite; break;
+            case 7:  animAsset.DeadQuyen[j].sprite = sprite; break;
+            case 8:  animAsset.DeadDao[j].sprite = sprite; break;
+            case 9:  animAsset.DeadBong[j].sprite = sprite; break;
+            case 10:  animAsset.DeadChuy[j].sprite = sprite; break;
+            case 11:  animAsset.AttackPet1[j].sprite = sprite; break;
+            case 12:  animAsset.AttackPet2[j].sprite = sprite; break;
+            case 13:  animAsset.DeadPet[j].sprite = sprite; break;
+            case 14:  animAsset.HitPet[j].sprite = sprite; break;
+            case 15:  animAsset.AttackPetTieu[j].sprite = sprite; break;
+            case 16:  animAsset.PetRun[j].sprite = sprite; break;
+            case 17:  animAsset.PetWalk[j].sprite = sprite; break;
+            case 18:  animAsset.HitQuyen[j].sprite = sprite; break;
+            case 19:  animAsset.HitDao[j].sprite = sprite; break;
+            case 20:  animAsset.HitBong[j].sprite = sprite; break;
+            case 21:  animAsset.HitChuy[j].sprite = sprite; break;
+            case 22:  animAsset.Jump[j].sprite = sprite; break;
+            case 23:  animAsset.AttackTieu[j].sprite = sprite; break;
+            case 24:  animAsset.ChuongQuyen[j].sprite = sprite; break;
+            case 25:  animAsset.ChuongDao[j].sprite = sprite; break;
+            case 26:  animAsset.ChuongBong[j].sprite = sprite; break;
+            case 27:  animAsset.ChuongChuy[j].sprite = sprite; break;
+            case 28:  animAsset.PetStand[j].sprite = sprite; break;
+            case 29:  animAsset.RunQuyen[j].sprite = sprite; break;
+            case 30:  animAsset.RunDao[j].sprite = sprite; break;
+            case 31:  animAsset.RunBong[j].sprite = sprite; break;
+            case 32:  animAsset.RunChuy[j].sprite = sprite; break;
+            case 33:  animAsset.Stand1[j].sprite = sprite; break;
+            case 34:  animAsset.Stand2[j].sprite = sprite; break;
+            case 35:  animAsset.StandQuyen[j].sprite = sprite; break;
+            case 36:  animAsset.StandDao[j].sprite = sprite; break;
+            case 37:  animAsset.StandBong[j].sprite = sprite; break;
+            case 38:  animAsset.StandChuy[j].sprite = sprite; break;
+            case 39:  animAsset.WalkQuyen[j].sprite = sprite; break;
+            case 40:  animAsset.WalkDao[j].sprite = sprite; break;
+            case 41:  animAsset.WalkBong[j].sprite = sprite; break;
+            case 42:  animAsset.WalkChuy[j].sprite = sprite; break;
+            case 43:  animAsset.Thien[j].sprite = sprite; break;
         }
     }
+    #endregion
 }
